@@ -10,12 +10,37 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.macbookuser.alarmclock.MainActivity">
 
-
-    <Button
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        android:id="@+id/button_cancel" />
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:id="@+id/button_save"
+            android:layout_gravity="right"
+            android:drawablePadding="4dp"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:id="@+id/button_cancel"
+            android:layout_gravity="left"
+            android:drawablePadding="4dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/alarm_sounds"
+            android:id="@+id/button_alarmSounds"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+
 
     <TimePicker
         android:layout_width="wrap_content"
