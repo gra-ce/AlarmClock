@@ -19,8 +19,6 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
 
 
-
-
     private TimePicker timePicker;
     private Switch switch_sun;
     private Switch switch_mon;
@@ -33,19 +31,19 @@ public class MainActivity extends AppCompatActivity {
     private Button button_cancel;
     private Button button_save;
     private Button button_alarmSounds;
+    private long time;
     private int hours;
     private int minutes;
-    private int alarmTime;
-    private int hoursNow;
-    private int minutesNow;
     private int timeNow;
-    private long timeLeft;
+    private int alarmTime;
+    private long timeLeft1;
     private int songNumber;
-    public static final String HOURS_NAME =" ";
-    public static final String MINUTES_NAME =" ";
+    public static final String HOURS_NAME ="hours";
+    public static final String MINUTES_NAME ="minutes";
     public static final String ALARM_CHOICE = "";
     public static final int REQUEST_SONG=0;
     private int alarmNumber;
+    private int alarmChoice;
 
 
     private boolean[] day_of_week;
@@ -82,10 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 switch_sat.isChecked()
         };
 
-        Calendar c = Calendar.getInstance();
-        int minutesNow = c.get(Calendar.MINUTE);
-        int hoursNow = c.get(Calendar.HOUR);
-        setTime();
+
 
 
         button_save.setOnClickListener(new View.OnClickListener(){
@@ -94,15 +89,34 @@ public class MainActivity extends AppCompatActivity {
                 //Context context = MainActivity.this;
                //PendingIntent.FLAG_UPDATE_CURRENT
                //Intent alarmPage = new Intent(MainActivity.this, AlarmPage.class);
+               /**
+                setTime();
                 AlarmManager alarm = (AlarmManager)(MainActivity.this.getSystemService(Context.ALARM_SERVICE));
                 Intent intent = new Intent(MainActivity.this, myReceiver.class);
                 intent.putExtra(HOURS_NAME, hours);
             intent.putExtra(MINUTES_NAME, minutes);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 123, intent,PendingIntent.FLAG_UPDATE_CURRENT);
                 //alarm.setExact(AlarmManager.RTC_WAKEUP,timeLeft, PendingIntent.getBroadcast(MainActivity.this,123,alarmPage,PendingIntent.FLAG_UPDATE_CURRENT));
-                alarm.setExact(AlarmManager.RTC_WAKEUP,timeLeft, pendingIntent);
+                alarm.setExact(AlarmManager.RTC_WAKEUP,timeLeft1, pendingIntent);
 
                 Toast.makeText(MainActivity.this, "Your alarm has been saved", Toast.LENGTH_SHORT).show();
+
+**/
+
+
+
+                AlarmManager alarm = (AlarmManager)(MainActivity.this.getSystemService(Context.ALARM_SERVICE));
+                Intent intent = new Intent(MainActivity.this, myReceiver.class);
+                hours = timePicker.getHour();
+                minutes = timePicker.getMinute();
+                intent.putExtra(HOURS_NAME, hours);
+                intent.putExtra(MINUTES_NAME, minutes);
+                intent.putExtra(AlarmSounds.ALARM_CHOICE, alarmNumber);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 123, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                setTime();
+                alarm.set(AlarmManager.RTC_WAKEUP,timeLeft1, pendingIntent);
+                Toast.makeText(MainActivity.this, "Your alarm has been saved", Toast.LENGTH_SHORT).show();
+
 
                 /**
                  * public class AlarmReceiver extends BroadcastReceiver {
@@ -116,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                  **/
 
 
+
             }
                                        }
         );
@@ -123,14 +138,14 @@ public class MainActivity extends AppCompatActivity {
         button_alarmSounds.setOnClickListener(new View.OnClickListener(){
                                                   @Override
                                                   public void onClick(View view) {
-                                                      Intent alarmSounds = new Intent(MainActivity.this, AlarmSounds.class);
 
-                                                      alarmSounds.putExtra(ALARM_CHOICE, alarmNumber);
+                                                      Intent alarmSounds = new Intent(MainActivity.this, AlarmSounds.class);
                                                       startActivityForResult(alarmSounds, REQUEST_SONG);
 
                                                   }
                                               }
         );
+
 
 
 
@@ -148,20 +163,73 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //result code says what happened. data is what gets passed back to us
+        //TODO: do something with the data that gets passed back
+        if(resultCode == RESULT_OK && requestCode == REQUEST_SONG){
+            //TODO extract the information from the intent "data"
+            //now do something with it
+            //true if they cheated. have this in the cheat activity
+            //but not in this one
+            //use getExtra to extract information from the intent "data"
+            alarmChoice =data.getIntExtra(ALARM_CHOICE,0);
+            Intent intent = new Intent(MainActivity.this, AlarmPage.class);
+            intent.putExtra(ALARM_CHOICE, alarmChoice);
+
+            //this needs to be outside of the onCreate
+
+
+
+        }
+    }
+
+    /**
 @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
     if (resultCode== RESULT_OK && requestCode == REQUEST_SONG){
         songNumber = data.getIntExtra(ALARM_CHOICE, 1);
     }
 }
+**/
 
     private void setTime() {
-       // hours = timePicker.getHour();
-       // minutes = timePicker.getMinute();
-       // alarmTime = (hours*3600000 + minutes*60000);
-       // timeNow = (hoursNow*3600000 + minutesNow*60000);
-       // timeLeft = (long)(alarmTime - timeNow);
-        timeLeft= (long)(10000);
+        /**
+        hours = timePicker.getHour();
+        if (hours==12)
+        {
+            hours = 0;
+        }
+        minutes = timePicker.getMinute();
+        alarmTime = (hours*3600000 + minutes*60000);
+        timeNow = (hoursNow*3600000 + minutesNow*60000);
+        timeLeft1 = (long)(alarmTime);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(hoursNow, minutesNow);
+
+        hours = timePicker.getHour();
+        hours = hours -12;
+        if (hours==12)
+        {
+            hours = 0;
+        }
+        minutes = timePicker.getMinute();
+        alarmTime = (hours*3600000 + minutes*60000);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(hoursNow, minutesNow);
+        timeLeft1 = (long)(System.currentTimeMillis()+(alarmTime-calendar.getTimeInMillis()));
+        Toast.makeText(MainActivity.this, "" +timeLeft1, Toast.LENGTH_SHORT).show();
+**/
+
+
+
+        Calendar c = Calendar.getInstance();
+        timeNow = c.get(Calendar.HOUR_OF_DAY)*60*60*1000 + c.get(Calendar.MINUTE)*60*1000;
+        alarmTime = timePicker.getHour()*60*60*1000 + timePicker.getMinute()*60*1000;
+        timeLeft1 = (long)(System.currentTimeMillis() + (alarmTime-timeNow));
+        //Toast.makeText(MainActivity.this, ""+timeLeft1, Toast.LENGTH_SHORT).show();
+
 
     }
 

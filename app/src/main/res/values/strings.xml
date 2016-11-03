@@ -9,11 +9,12 @@
     <string name="sun">S</string>
     <string name="weekly">Weekly</string>
     <string name="time">time</string>
-    <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="alarm_sounds">Alarm Sounds</string>
     <string name="minion">Minion</string>
     <string name="circle_of_life">Circle of Life</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok_i_m_up">Ok, I\'m Up</string>
 
 
 </resources>
